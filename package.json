@@ -1,0 +1,20 @@
+{
+  "name": "voice-input-widget",
+  "version": "1.0.0",
+  "description": "マウスホバーで音声認識を開始し、認識結果をテキストエリアに入力する再利用可能なJavaScriptウィジェット",
+  "main": "voice-input-widget.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "voice-input",
+    "speech-recognition",
+    "japanese",
+    "kuromoji"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "kuromoji": "^0.1.2"
+  }
+}

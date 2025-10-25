@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceInputWidget - デモ</title>
+    <link rel="stylesheet" href="voice-input-widget.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .inline-demo {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .inline-demo input[type="text"] {
+            padding-right: 60px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .info-box code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 8px;
+            color: #0066cc;
+            font-size: 14px;
+        }
+
+        .mode-label {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .section h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 VoiceInputWidget デモ</h1>
+        <p class="subtitle">マウスホバーで音声入力を体験</p>
+
+        <div class="info-box">
+            <h3>使い方</h3>
+            <ul>
+                <li>左下の<strong>ピンク色のブロック</strong>にマウスをホバーすると音声認識が開始されます</li>
+                <li>音声が認識されると、テキストエリアに順番に入力されます</li>
+                <li>20文字以下: そのまま入力 | 20文字超: 最初の名詞句を抽出</li>
+                <li>対応ブラウザ: <code>Chrome</code>, <code>Edge</code>, <code>Safari</code></li>
+            </ul>
+        </div>
+
+        <!-- Fixed Mode デモ -->
+        <div class="section">
+            <h2>Fixed Mode デモ <span class="mode-label">左下固定</span></h2>
+            <div class="input-group">
+                <label for="word1">単語 1</label>
+                <input type="text" id="word1" placeholder="ホバーして音声入力...">
+            </div>
+            <div class="input-group">
+                <label for="word2">単語 2</label>
+                <input type="text" id="word2" placeholder="ホバーして音声入力...">
+            </div>
+            <div class="input-group">
+                <label for="word3">単語 3</label>
+                <input type="text" id="word3" placeholder="ホバーして音声入力...">
+            </div>
+        </div>
+
+        <!-- Inline Mode デモ -->
+        <div class="section">
+            <h2>Inline Mode デモ <span class="mode-label">入力欄内配置</span></h2>
+            <div class="input-group inline-demo">
+                <label for="inline-word1">単語 4 (Inline)</label>
+                <input type="text" id="inline-word1" placeholder="右側のアイコンをホバー...">
+            </div>
+            <div class="input-group inline-demo">
+                <label for="inline-word2">単語 5 (Inline)</label>
+                <input type="text" id="inline-word2" placeholder="右側のアイコンをホバー...">
+            </div>
+        </div>
+
+        <!-- コントロールパネル -->
+        <div class="section">
+            <h2>コントロール</h2>
+            <div class="button-group">
+                <button onclick="clearAllInputs()">すべてクリア</button>
+                <button onclick="toggleNounMode()">名詞抽出モード切替</button>
+                <button onclick="showCurrentValues()">現在の値を表示</button>
+            </div>
+            <div class="status" id="status">
+                現在のモード: <strong>通常モード</strong> (20文字超で名詞抽出)
+            </div>
+        </div>
+    </div>
+
+    <!-- Kuromoji.js (Local) -->
+    <script src="node_modules/kuromoji/build/kuromoji.js"></script>
+
+    <!-- VoiceInputWidget -->
+    <script src="voice-input-widget.js"></script>
+
+    <script>
+        let fixedWidget;
+        let inlineWidget1;
+        let inlineWidget2;
+        let allWidgets = [];
+        let nounPhraseOnlyMode = false;
+
+        // ページ読み込み後に初期化
+        window.addEventListener('DOMContentLoaded', () => {
+            // Fixed Mode ウィジェット（左下固定）
+            fixedWidget = new VoiceInputWidget({
+                targetIds: ['word1', 'word2', 'word3'],
+                maxLength: 20,
+                extractNoun: true,
+                position: 'fixed',
+                kuromojiDicPath: 'node_modules/kuromoji/dict/',
+                onWordExtracted: (word) => {
+                    console.log('Fixed Mode - 抽出された単語:', word);
+                }
+            });
+
+            // Inline Mode ウィジェット1（入力欄内）
+            inlineWidget1 = new VoiceInputWidget({
+                targetIds: ['inline-word1'],
+                maxLength: 20,
+                extractNoun: true,
+                position: 'inline',
+                triggerText: '🎤',
+                activeText: '🎙️',
+                kuromojiDicPath: 'node_modules/kuromoji/dict/',
+                onWordExtracted: (word) => {
+                    console.log('Inline Mode 1 - 抽出された単語:', word);
+                }
+            });
+
+            // Inline Mode ウィジェット2（入力欄内）
+            inlineWidget2 = new VoiceInputWidget({
+                targetIds: ['inline-word2'],
+                maxLength: 20,
+                extractNoun: true,
+                position: 'inline',
+                triggerText: '🎤',
+                activeText: '🎙️',
+                kuromojiDicPath: 'node_modules/kuromoji/dict/',
+                onWordExtracted: (word) => {
+                    console.log('Inline Mode 2 - 抽出された単語:', word);
+                }
+            });
+
+            // 全ウィジェットを配列に保存
+            allWidgets = [fixedWidget, inlineWidget1, inlineWidget2];
+
+            console.log('VoiceInputWidget デモ初期化完了');
+        });
+
+        // すべての入力をクリア
+        function clearAllInputs() {
+            const inputs = ['word1', 'word2', 'word3', 'inline-word1', 'inline-word2'];
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.value = '';
+            });
+            updateStatus('すべての入力をクリアしました');
+        }
+
+        // 名詞抽出モードの切替
+        function toggleNounMode() {
+            nounPhraseOnlyMode = !nounPhraseOnlyMode;
+
+            // 全ウィジェットに対してモード変更を適用
+            allWidgets.forEach(widget => {
+                if (widget) {
+                    widget.setExtractNounPhraseOnly(nounPhraseOnlyMode);
+                }
+            });
+
+            const mode = nounPhraseOnlyMode ? '名詞句のみ抽出モード' : '通常モード (20文字超で名詞抽出)';
+            updateStatus(`モード変更: <strong>${mode}</strong>`);
+        }
+
+        // 現在の値を表示
+        function showCurrentValues() {
+            const values = {
+                word1: document.getElementById('word1').value,
+                word2: document.getElementById('word2').value,
+                word3: document.getElementById('word3').value,
+                'inline-word1': document.getElementById('inline-word1').value,
+                'inline-word2': document.getElementById('inline-word2').value
+            };
+            console.log('現在の値:', values);
+            alert(JSON.stringify(values, null, 2));
+        }
+
+        // ステータス更新
+        function updateStatus(message) {
+            const statusElement = document.getElementById('status');
+            statusElement.innerHTML = message;
+        }
+    </script>
+</body>
+</html>
