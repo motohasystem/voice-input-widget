@@ -222,6 +222,27 @@
             </div>
         </div>
 
+        <!-- Append Mode デモ -->
+        <div class="section">
+            <h2>Append Mode デモ <span class="mode-label">追加入力モード</span></h2>
+            <div class="info-box">
+                <h3>Append Mode とは？</h3>
+                <ul>
+                    <li>音声入力するたびに、既存のテキストに<strong>追加</strong>していくモード</li>
+                    <li><code>inputMode: 'append'</code> で有効化</li>
+                    <li><code>appendSeparator</code> で区切り文字を指定可能（スペース、カンマなど）</li>
+                </ul>
+            </div>
+            <div class="input-group">
+                <label for="append-space">文章作成（スペース区切り）</label>
+                <input type="text" id="append-space" placeholder="複数回ホバーして文章を作成...">
+            </div>
+            <div class="input-group">
+                <label for="append-comma">リスト作成（カンマ区切り）</label>
+                <input type="text" id="append-comma" placeholder="複数回ホバーしてリストを作成...">
+            </div>
+        </div>
+
         <!-- コントロールパネル -->
         <div class="section">
             <h2>コントロール</h2>
@@ -246,6 +267,8 @@
         let fixedWidget;
         let inlineWidget1;
         let inlineWidget2;
+        let appendSpaceWidget;
+        let appendCommaWidget;
         let allWidgets = [];
         let nounPhraseOnlyMode = false;
 
@@ -291,15 +314,43 @@
                 }
             });
 
+            // Append Mode ウィジェット（スペース区切り）
+            appendSpaceWidget = new VoiceInputWidget({
+                targetIds: ['append-space'],
+                maxLength: 20,
+                extractNoun: true,
+                position: 'fixed',
+                inputMode: 'append',
+                appendSeparator: ' ',
+                kuromojiDicPath: 'node_modules/kuromoji/dict/',
+                onWordExtracted: (word) => {
+                    console.log('Append Mode (スペース区切り) - 抽出された単語:', word);
+                }
+            });
+
+            // Append Mode ウィジェット（カンマ区切り）
+            appendCommaWidget = new VoiceInputWidget({
+                targetIds: ['append-comma'],
+                maxLength: 20,
+                extractNoun: true,
+                position: 'fixed',
+                inputMode: 'append',
+                appendSeparator: ', ',
+                kuromojiDicPath: 'node_modules/kuromoji/dict/',
+                onWordExtracted: (word) => {
+                    console.log('Append Mode (カンマ区切り) - 抽出された単語:', word);
+                }
+            });
+
             // 全ウィジェットを配列に保存
-            allWidgets = [fixedWidget, inlineWidget1, inlineWidget2];
+            allWidgets = [fixedWidget, inlineWidget1, inlineWidget2, appendSpaceWidget, appendCommaWidget];
 
             console.log('VoiceInputWidget デモ初期化完了');
         });
 
         // すべての入力をクリア
         function clearAllInputs() {
-            const inputs = ['word1', 'word2', 'word3', 'inline-word1', 'inline-word2'];
+            const inputs = ['word1', 'word2', 'word3', 'inline-word1', 'inline-word2', 'append-space', 'append-comma'];
             inputs.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) element.value = '';
@@ -329,7 +380,9 @@
                 word2: document.getElementById('word2').value,
                 word3: document.getElementById('word3').value,
                 'inline-word1': document.getElementById('inline-word1').value,
-                'inline-word2': document.getElementById('inline-word2').value
+                'inline-word2': document.getElementById('inline-word2').value,
+                'append-space': document.getElementById('append-space').value,
+                'append-comma': document.getElementById('append-comma').value
             };
             console.log('現在の値:', values);
             alert(JSON.stringify(values, null, 2));

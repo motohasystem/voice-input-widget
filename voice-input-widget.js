@@ -7,7 +7,9 @@
  * const widget = new VoiceInputWidget({
  *   targetIds: ['word1', 'word2', 'word3'],
  *   maxLength: 20,
- *   extractNoun: true
+ *   extractNoun: true,
+ *   inputMode: 'append',      // 'replace'（デフォルト）または 'append'
+ *   appendSeparator: ' '      // appendモード時の区切り文字
  * });
  */
 class VoiceInputWidget {
@@ -23,7 +25,9 @@ class VoiceInputWidget {
             unsupportedText: options.unsupportedText || '音声認識が利用できません',
             onWordExtracted: options.onWordExtracted || null,
             kuromojiDicPath: options.kuromojiDicPath || 'node_modules/kuromoji/dict/',
-            position: options.position || 'fixed' // 'fixed' または 'inline'
+            position: options.position || 'fixed', // 'fixed' または 'inline'
+            inputMode: options.inputMode || 'replace', // 'replace' または 'append'
+            appendSeparator: options.appendSeparator !== undefined ? options.appendSeparator : '' // appendモード時の区切り文字
         };
 
         // 状態管理
@@ -250,7 +254,21 @@ class VoiceInputWidget {
         console.log('表示する単語:', wordToDisplay);
 
         // テキストエリアに表示
-        this.targetInputs[this.currentIndex].value = wordToDisplay;
+        const targetInput = this.targetInputs[this.currentIndex];
+
+        if (this.options.inputMode === 'append') {
+            // 追加モード: 既存の値に追加
+            const currentValue = targetInput.value;
+            if (currentValue) {
+                targetInput.value = currentValue + this.options.appendSeparator + wordToDisplay;
+            } else {
+                targetInput.value = wordToDisplay;
+            }
+        } else {
+            // 置き換えモード（デフォルト）: 既存の値を置き換え
+            targetInput.value = wordToDisplay;
+        }
+
         this.currentIndex = (this.currentIndex + 1) % this.targetInputs.length;
 
         // カスタムコールバック

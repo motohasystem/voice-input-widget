@@ -50,6 +50,21 @@ VoiceInputWidget is a reusable JavaScript widget that enables voice input into t
 - Small trigger button (40px × 40px)
 - Set via `options.position: 'inline'`
 
+### Input Modes
+
+**Replace Mode (default):**
+- Each new voice input replaces the current value in the target input field
+- Set via `options.inputMode: 'replace'`
+- Use case: Single-word or single-phrase input fields
+
+**Append Mode:**
+- Each new voice input is appended to the existing value in the target input field
+- Set via `options.inputMode: 'append'`
+- Optionally specify a separator via `options.appendSeparator` (default: empty string)
+- Use case: Building sentences, creating lists, continuous dictation
+- Example with space separator: `{ inputMode: 'append', appendSeparator: ' ' }`
+- Example with comma separator: `{ inputMode: 'append', appendSeparator: ', ' }`
+
 ## Key Implementation Details
 
 ### Speech Recognition Event Flow
@@ -87,6 +102,8 @@ this.currentIndex = (this.currentIndex + 1) % this.targetInputs.length;
   unsupportedText: '音声認識が利用できません',
   kuromojiDicPath: 'node_modules/kuromoji/dict/',
   position: 'fixed',          // 'fixed' or 'inline'
+  inputMode: 'replace',       // 'replace' (default) or 'append'
+  appendSeparator: '',        // Separator for append mode (default: empty string)
   onWordExtracted: null       // Callback function(word)
 }
 ```
